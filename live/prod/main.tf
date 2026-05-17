@@ -13,7 +13,6 @@ module "network" {
   name                   = "prod-gke-platform"
   region                 = var.region
   authorized_admin_cidrs = var.authorized_admin_cidrs
-  labels                 = local.labels
 
   subnets = {
     "prod-gke-primary" = {

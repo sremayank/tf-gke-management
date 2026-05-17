@@ -32,9 +32,3 @@ variable "authorized_admin_cidrs" {
   type        = list(string)
   default     = []
 }
-
-variable "labels" {
-  description = "Labels applied to supported resources."
-  type        = map(string)
-  default     = {}
-}
