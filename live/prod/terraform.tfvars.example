@@ -1,0 +1,9 @@
+project_id = "example-prod-project"
+region     = "europe-west2"
+dr_region  = "europe-west1"
+
+authorized_admin_cidrs = [
+  "203.0.113.10/32"
+]
+
+notification_channels = []

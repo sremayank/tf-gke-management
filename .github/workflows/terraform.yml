@@ -1,0 +1,62 @@
+name: terraform
+
+on:
+  pull_request:
+    paths:
+      - "**/*.tf"
+      - "**/*.tfvars.example"
+      - ".github/workflows/terraform.yml"
+      - ".tflint.hcl"
+      - ".checkov.yml"
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: quality gates
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [dev, prod]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.51.1
+
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+
+      - name: TFLint init
+        run: tflint --init
+
+      - name: TFLint
+        run: tflint --recursive
+
+      - name: Terraform init
+        working-directory: live/${{ matrix.environment }}
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        working-directory: live/${{ matrix.environment }}
+        run: terraform validate
+
+      - name: Checkov
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: .
+          framework: terraform
+          quiet: true
