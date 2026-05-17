@@ -30,11 +30,12 @@ resource "google_container_cluster" "this" {
   network    = var.network
   subnetwork = var.subnetwork
 
-  deletion_protection      = true
-  remove_default_node_pool = true
-  initial_node_count       = 1
-  enable_shielded_nodes    = true
-  enable_l4_ilb_subsetting = true
+  deletion_protection         = true
+  remove_default_node_pool    = true
+  initial_node_count          = 1
+  enable_shielded_nodes       = true
+  enable_l4_ilb_subsetting    = true
+  enable_intranode_visibility = true
 
   networking_mode = "VPC_NATIVE"
 
@@ -46,9 +47,19 @@ resource "google_container_cluster" "this" {
     workload_pool = "${var.project_id}.svc.id.goog"
   }
 
+  authenticator_groups_config {
+    security_group = var.rbac_security_group
+  }
+
   ip_allocation_policy {
     cluster_secondary_range_name  = var.pods_secondary_range_name
     services_secondary_range_name = var.services_secondary_range_name
+  }
+
+  master_auth {
+    client_certificate_config {
+      issue_client_certificate = false
+    }
   }
 
   private_cluster_config {
@@ -85,6 +96,10 @@ resource "google_container_cluster" "this" {
       enabled = true
     }
 
+    network_policy_config {
+      disabled = false
+    }
+
     horizontal_pod_autoscaling {
       disabled = false
     }
@@ -96,6 +111,11 @@ resource "google_container_cluster" "this" {
 
   binary_authorization {
     evaluation_mode = "PROJECT_SINGLETON_POLICY_ENFORCE"
+  }
+
+  network_policy {
+    enabled  = true
+    provider = "CALICO"
   }
 
   database_encryption {

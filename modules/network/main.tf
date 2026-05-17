@@ -20,7 +20,7 @@ resource "google_compute_subnetwork" "this" {
   region                   = coalesce(each.value.region, var.region)
   network                  = google_compute_network.this.id
   ip_cidr_range            = each.value.cidr
-  private_ip_google_access = each.value.private_google_access
+  private_ip_google_access = true
   purpose                  = "PRIVATE"
 
   secondary_ip_range {

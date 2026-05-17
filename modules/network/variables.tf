@@ -22,7 +22,6 @@ variable "subnets" {
     pods_secondary_cidr     = string
     services_secondary_name = string
     services_secondary_cidr = string
-    private_google_access   = optional(bool, true)
     flow_logs_enabled       = optional(bool, true)
   }))
 }

@@ -20,3 +20,9 @@ variable "notification_channels" {
   type        = list(string)
   default     = []
 }
+
+variable "rbac_security_group" {
+  description = "Google Group used as the root for Google Groups for GKE RBAC."
+  type        = string
+  default     = "gke-security-groups@example.com"
+}

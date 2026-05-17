@@ -53,6 +53,11 @@ variable "release_channel" {
   default     = "REGULAR"
 }
 
+variable "rbac_security_group" {
+  description = "Google Group used as the root for Google Groups for GKE RBAC."
+  type        = string
+}
+
 variable "node_pools" {
   description = "Managed node pools."
   type = map(object({

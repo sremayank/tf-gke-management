@@ -7,3 +7,5 @@ authorized_admin_cidrs = [
 ]
 
 notification_channels = []
+
+rbac_security_group = "gke-security-groups@example.com"

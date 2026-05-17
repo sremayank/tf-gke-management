@@ -45,6 +45,7 @@ module "primary_cluster" {
   services_secondary_range_name = module.network.subnets["prod-gke-primary"].services_secondary_name
   master_ipv4_cidr_block        = "172.20.0.0/28"
   release_channel               = "STABLE"
+  rbac_security_group           = var.rbac_security_group
   master_authorized_networks = [
     for cidr in var.authorized_admin_cidrs : {
       cidr_block   = cidr
@@ -85,6 +86,7 @@ module "secondary_cluster" {
   services_secondary_range_name = module.network.subnets["prod-gke-secondary"].services_secondary_name
   master_ipv4_cidr_block        = "172.20.0.16/28"
   release_channel               = "STABLE"
+  rbac_security_group           = var.rbac_security_group
   master_authorized_networks = [
     for cidr in var.authorized_admin_cidrs : {
       cidr_block   = cidr
